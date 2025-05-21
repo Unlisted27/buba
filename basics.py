@@ -102,4 +102,4 @@ def run_buba_exec(directory):
         except subprocess.CalledProcessError as e:
             print(f"Error while running {executable}: {e}")
     else:
-        exit("Selected is not a valid .bub")
+        return "Selected is not a valid .bub"

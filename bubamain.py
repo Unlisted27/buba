@@ -30,6 +30,8 @@ def main():
                 #print(selected_path)
                 if os.path.isdir(selected_path):
                     os.chdir(selected_path)
+                elif basics.is_buba_exec(selected_path):
+                    basics.run_buba_exec(selected_path)
                 else:
                     print("Bad dir")
             except Exception as e:
