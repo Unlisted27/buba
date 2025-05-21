@@ -1,0 +1,21 @@
+import subprocess
+from pathlib import Path
+
+def fix_py_files(directory):
+    path = Path(directory)
+    for py_file in path.glob("*.py"):
+        # Make the file executable
+        py_file.chmod(py_file.stat().st_mode | 0o111)
+
+        # Run dos2unix on the file
+        try:
+            subprocess.run(["dos2unix", str(py_file)], check=True)
+        except subprocess.CalledProcessError:
+            print(f"Failed to run dos2unix on {py_file}")
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} /path/to/directory")
+    else:
+        fix_py_files(sys.argv[1])
