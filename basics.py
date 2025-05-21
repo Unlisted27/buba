@@ -1,4 +1,4 @@
-import time,os,pathlib,json
+import time,os,pathlib,json,subprocess
 import RPi.GPIO as GPIO
 from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
@@ -90,9 +90,16 @@ def is_buba_exec(directory):
 def run_buba_exec(directory):
     """directory can be type str or pathlib.Path"""
     directory = pathlib.Path(directory) #Create a Path object
-    config_path = directory / "bubconfig.json"
     if is_buba_exec(directory):
-        with open(directory)
-        os.
+        config_path = directory / "bubconfig.json"
+        with open(config_path) as file:
+            data = json.load(file)
+        executable = data["executable"]
+        try:
+            subprocess.run([executable], check=True)
+        except FileNotFoundError:
+            print(f"Executable '{executable}' not found.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error while running {executable}: {e}")
     else:
         exit("Selected is not a valid .bub")
