@@ -1,4 +1,4 @@
-import time,os,pathlib
+import time,os,pathlib,json
 import RPi.GPIO as GPIO
 from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
@@ -74,7 +74,7 @@ def error_warn(device):
 
 def is_buba_exec(directory):
     """directory can be type str or pathlib.Path"""
-    if isinstance(directory, str):
+    if not isinstance(directory, pathlib.Path):
         directory = pathlib.Path(directory)
     
     #Ensure that the provided item is a directory
@@ -87,4 +87,12 @@ def is_buba_exec(directory):
     else:
         return False #return if its a bad directory
     
-    
+def run_buba_exec(directory):
+    """directory can be type str or pathlib.Path"""
+    directory = pathlib.Path(directory) #Create a Path object
+    config_path = directory / "bubconfig.json"
+    if is_buba_exec(directory):
+        with open(directory)
+        os.
+    else:
+        exit("Selected is not a valid .bub")

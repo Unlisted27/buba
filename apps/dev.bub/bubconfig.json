@@ -1,0 +1,5 @@
+{
+    "name":"dev",
+    "executable":"dev.py",
+    "version":"0.0.1",
+    "description":"displays the device IP"}

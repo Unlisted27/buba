@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys,time,os,basics
+import sys,time,os, basics
 from luma.core.interface.serial import spi
 from luma.lcd.device import st7789
 serial = spi(
