@@ -28,10 +28,10 @@ def main():
                 index, selected = basics.menu(device,curdir)
                 selected_path = os.path.abspath(selected) #Ensuring its an absolute path
                 #print(selected_path)
-                if os.path.isdir(selected_path):
-                    os.chdir(selected_path)
-                elif basics.is_buba_exec(selected_path):
+                if basics.is_buba_exec(selected_path):
                     basics.run_buba_exec(selected_path)
+                elif os.path.isdir(selected_path):
+                    os.chdir(selected_path)
                 else:
                     print("Bad dir")
             except Exception as e:
