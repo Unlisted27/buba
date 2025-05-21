@@ -94,7 +94,7 @@ def run_buba_exec(directory):
         config_path = directory / "bubconfig.json"
         with open(config_path) as file:
             data = json.load(file)
-        executable = data["executable"]
+        executable = directory / data["executable"]
         try:
             subprocess.run([executable], check=True)
         except FileNotFoundError:
