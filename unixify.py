@@ -4,7 +4,7 @@ from pathlib import Path
 
 def fix_py_files(directory):
     path = Path(directory)
-    for py_file in path.glob("*.py"):
+    for py_file in path.rglob("*.py"):  # recursive search
         # Make the file executable
         py_file.chmod(py_file.stat().st_mode | 0o111)
 
