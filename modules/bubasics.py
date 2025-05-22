@@ -2,6 +2,7 @@ import time,os,pathlib,json,subprocess, bubasicsconfig
 import RPi.GPIO as GPIO
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
+GPIO.cleanup()
 btn_up = bubasicsconfig.buttons.btn_up
 btn_down = bubasicsconfig.buttons.btn_down
 btn_select = bubasicsconfig.buttons.btn_select

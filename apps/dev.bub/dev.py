@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import socket, bubasics
+import RPi.GPIO as GPIO
+GPIO.cleanup()
 try:
     btn_select = bubasics.btn_select
     def get_ip():
