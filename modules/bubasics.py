@@ -81,7 +81,6 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
                     item = ">" + item
                 draw.text((0, i*line_height), item, fill="white")
             device.display(img)
-        button_cleanup()
         return selected
     except KeyboardInterrupt:
         device.clear()
