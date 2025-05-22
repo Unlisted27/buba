@@ -7,9 +7,10 @@ btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig
 btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 
-def gpio_cleanup(thing:gpiozero.Button):
+def gpio_cleanup(gpiozero_button):
+    """takes a gpiozero.Button object and closes it"""
     try:
-        thing.close
+        gpiozero_button.close
     except Exception as e:
         print(f"GPIO cleanup error: {e}")
 
