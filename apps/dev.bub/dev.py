@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import socket, bubasics
-import RPi.GPIO as GPIO
-GPIO.cleanup()
 try:
     btn_select = bubasics.btn_select
     def get_ip():
@@ -18,7 +16,9 @@ try:
         return IP
     bubasics.scrnprint("My ip: "+get_ip())
     btn_select.wait_for_press()
+    bubasics.gpio_cleanup()
 except Exception as e:
     print(e)
+    bubasics.gpio_cleanup()
     bubasics.error_warn()
     exit()

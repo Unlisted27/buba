@@ -1,5 +1,4 @@
 #This is all of the configuration that the basics.py module references.
-from gpiozero import Button
 from luma.core.interface.serial import spi
 from luma.lcd.device import st7789
 
@@ -11,9 +10,7 @@ class buttons():
     btn_up_gpio = 4
     btn_down_gpio = 27
     btn_select_gpio = 22
-    btn_up = Button(btn_up_gpio, bounce_time = 0.05)
-    btn_down = Button(btn_down_gpio, bounce_time = 0.05)
-    btn_select = Button(btn_select_gpio, bounce_time = 0.05)
+    bounce_time = 0.05
 
 serial = spi(
     port=0,

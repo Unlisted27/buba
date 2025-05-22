@@ -1,11 +1,15 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
-import RPi.GPIO as GPIO
+from gpiozero import Button, Device
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
-GPIO.cleanup()
-btn_up = bubasicsconfig.buttons.btn_up
-btn_down = bubasicsconfig.buttons.btn_down
-btn_select = bubasicsconfig.buttons.btn_select
+
+btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+
+def gpio_cleanup():
+    Device.close()
+
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
     height = device.height
     width = device.width
@@ -50,7 +54,7 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
         while selected is None: #Using is instead of == checks for exact match faster as its not checking equality
             height = device.height
             width = device.width
-            items_per_page = height - 1
+            items_per_page = height // line_height
             img = Image.new("RGB",(width,height),"black")
             draw = ImageDraw.Draw(img)
             # Calculate total pages and current page
@@ -67,8 +71,10 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
         return selected
     except KeyboardInterrupt:
         device.clear()
-        GPIO.cleanup()
+        gpio_cleanup()
         exit("\nkeyboard interrupt")
+    finally:
+        gpio_cleanup()
 
 def error_warn(device = bubasicsconfig.device):
     width = device.width
