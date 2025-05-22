@@ -9,7 +9,9 @@ def main():
                 selected_path = os.path.abspath(selected) #Ensuring its an absolute path
                 #print(selected_path)
                 if bubasics.is_buba_exec(selected_path):
+                    bubasics.button_cleanup()
                     bubasics.run_buba_exec(selected_path)
+                    sys.exit()
                 elif os.path.isdir(selected_path):
                     os.chdir(selected_path)
                 else:
