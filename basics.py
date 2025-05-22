@@ -2,7 +2,9 @@ import time,os,pathlib,json,subprocess, bubasicsconfig
 import RPi.GPIO as GPIO
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
-
+btn_up = bubasicsconfig.buttons.btn_up
+btn_down = bubasicsconfig.buttons.btn_down
+btn_select = bubasicsconfig.buttons.btn_select
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
     height = device.height
     width = device.width
@@ -11,7 +13,7 @@ def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),
     draw.text(coords, text, fill=text_color,font=text_font)
     device.display(img)
 
-def menu(items:list,device = bubasicsconfig.device,button_gpio:list=[4,27,22],font=ImageFont.load_default(),spacing = 0):
+def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default(),spacing = 0):
     """buttons: [btn_up_pin:int,btn_down_pin:int,btn_select_pin:int]  
     Returns: (selected_item_index,selected_item_str)  
     All pins should be GPIO pins, not physical  
@@ -40,9 +42,9 @@ def menu(items:list,device = bubasicsconfig.device,button_gpio:list=[4,27,22],fo
         nonlocal cursor
         nonlocal selected
         selected = (cursor,items[cursor])
-    bubasicsconfig.buttons.btn_up.when_pressed = move_up
-    bubasicsconfig.buttons.btn_down.when_pressed = move_down
-    bubasicsconfig.buttons.btn_select.when_pressed = select
+    btn_up.when_pressed = move_up
+    btn_down.when_pressed = move_down
+    btn_select.when_pressed = select
     try:
         while selected is None: #Using is instead of == checks for exact match faster as its not checking equality
             height = device.height
