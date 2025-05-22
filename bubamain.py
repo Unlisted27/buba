@@ -22,5 +22,7 @@ def main():
                 bubasics.error_warn()
     except KeyboardInterrupt:
         sys.exit("Goodbye")
+    finally:
+        bubasics.button_cleanup()
 
 main()

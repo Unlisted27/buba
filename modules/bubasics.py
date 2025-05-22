@@ -84,10 +84,7 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
         return selected
     except KeyboardInterrupt:
         device.clear()
-        button_cleanup()
         exit("\nkeyboard interrupt")
-    finally:
-        button_cleanup()
 
 def error_warn(device = bubasicsconfig.device):
     width = device.width
