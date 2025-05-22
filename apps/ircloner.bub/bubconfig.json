@@ -1,0 +1,6 @@
+{
+    "name":"ircloner",
+    "executable":"ircloner.py",
+    "version":"0.0.1",
+    "description":"clones and sends ir signals"
+}
