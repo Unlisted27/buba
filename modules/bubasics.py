@@ -7,8 +7,20 @@ btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig
 btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 
-def gpio_cleanup():
-    Device.close()
+def gpio_cleanup(thing:gpiozero.Button):
+    try:
+        thing.close
+    except Exception as e:
+        print(f"GPIO cleanup error: {e}")
+
+def button_cleanup():
+    try:
+        btn_up.close()
+        btn_down.close()
+        btn_select.close()
+    except Exception as e:
+        print(f"button cleanup error: {e}")
+
 
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
     height = device.height
@@ -71,10 +83,10 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
         return selected
     except KeyboardInterrupt:
         device.clear()
-        gpio_cleanup()
+        button_cleanup()
         exit("\nkeyboard interrupt")
     finally:
-        gpio_cleanup()
+        button_cleanup()
 
 def error_warn(device = bubasicsconfig.device):
     width = device.width
