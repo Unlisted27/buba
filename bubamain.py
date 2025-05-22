@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys,time,os, modules.bubasics as bubasics
+import sys,time,os, bubasics
 def main():
     try:
         while True:
