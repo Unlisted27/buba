@@ -1,6 +1,6 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
 import RPi.GPIO as GPIO
-from gpiozero import Button
+#from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
@@ -40,12 +40,9 @@ def menu(items:list,device = bubasicsconfig.device,button_gpio:list=[4,27,22],fo
         nonlocal cursor
         nonlocal selected
         selected = (cursor,items[cursor])
-    btn_up = Button(button_gpio[0], bounce_time = 0.05)
-    btn_down = Button(button_gpio[1], bounce_time = 0.05)
-    btn_select = Button(button_gpio[2], bounce_time = 0.05)
-    btn_up.when_pressed = move_up
-    btn_down.when_pressed = move_down
-    btn_select.when_pressed = select
+    bubasicsconfig.buttons.btn_up.when_pressed = move_up
+    bubasicsconfig.buttons.btn_down.when_pressed = move_down
+    bubasicsconfig.buttons.btn_select.when_pressed = select
     try:
         while selected is None: #Using is instead of == checks for exact match faster as its not checking equality
             height = device.height
