@@ -17,6 +17,7 @@ try:
         return IP
     bubasics.scrnprint("My ip: "+get_ip())
     btn_select.wait_for_press()
+    bubasics.clear_screen()
     bubasics.button_cleanup()
 except Exception as e:
     print(e)

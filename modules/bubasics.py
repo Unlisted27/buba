@@ -1,5 +1,5 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
-from gpiozero import Button, Device
+from gpiozero import Button
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
@@ -22,6 +22,8 @@ def button_cleanup():
     except Exception as e:
         print(f"button cleanup error: {e}")
 
+def clear_screen(device = bubasicsconfig.device):
+    device.clear()
 
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
     height = device.height
@@ -94,7 +96,6 @@ def error_warn(device = bubasicsconfig.device):
     draw.rectangle([(0, 0), (width - 1, height - 1)], outline="red", width=5)
     device.display(img)
     time.sleep(0.02)
-    #device.clear()
 
 def is_buba_exec(directory):
     """directory can be type str or pathlib.Path"""
