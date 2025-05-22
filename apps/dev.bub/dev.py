@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import socket, bubasics
+print("Made it!")
 try:
     btn_select = bubasics.btn_select
     def get_ip():
