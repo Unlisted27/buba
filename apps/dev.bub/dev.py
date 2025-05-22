@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import socket, bubasics
 print("Made it!")
+import socket, bubasics
 try:
     btn_select = bubasics.btn_select
     def get_ip():
