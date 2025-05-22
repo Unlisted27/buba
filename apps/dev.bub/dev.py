@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import socket
+import socket, basics
+
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
@@ -12,4 +13,5 @@ def get_ip():
     finally:
         s.close()
     return IP
-print("My ip: "+get_ip())
+basics.scrnprint("My ip: "+get_ip())
+btn_select = Button(button_gpio[2], bounce_time = 0.05)

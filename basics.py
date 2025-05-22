@@ -1,5 +1,6 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
 import RPi.GPIO as GPIO
+from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
