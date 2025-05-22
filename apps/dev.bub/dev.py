@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import socket, basics
+import socket, bubasics
 try:
-    btn_select = basics.btn_select
+    btn_select = bubasics.btn_select
     def get_ip():
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(0)
@@ -14,9 +14,9 @@ try:
         finally:
             s.close()
         return IP
-    basics.scrnprint("My ip: "+get_ip())
+    bubasics.scrnprint("My ip: "+get_ip())
     btn_select.wait_for_press()
 except Exception as e:
     print(e)
-    basics.error_warn()
+    bubasics.error_warn()
     exit()
