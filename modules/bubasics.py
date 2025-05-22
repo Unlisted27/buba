@@ -10,7 +10,7 @@ btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasi
 def gpio_cleanup(gpiozero_button):
     """takes a gpiozero.Button object and closes it"""
     try:
-        gpiozero_button.close
+        gpiozero_button.close()
     except Exception as e:
         print(f"GPIO cleanup error: {e}")
 
@@ -81,6 +81,7 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
                     item = ">" + item
                 draw.text((0, i*line_height), item, fill="white")
             device.display(img)
+        button_cleanup()
         return selected
     except KeyboardInterrupt:
         device.clear()
@@ -120,6 +121,7 @@ def run_buba_exec(directory):
             data = json.load(file)
         executable = directory / data["executable"]
         try:
+            os.execv(executable,[executable])
             subprocess.run([executable], check=True)
         except FileNotFoundError:
             print(f"Executable '{executable}' not found.")

@@ -11,7 +11,6 @@ def main():
                 if bubasics.is_buba_exec(selected_path):
                     bubasics.button_cleanup()
                     bubasics.run_buba_exec(selected_path)
-                    sys.exit()
                 elif os.path.isdir(selected_path):
                     os.chdir(selected_path)
                 else:
