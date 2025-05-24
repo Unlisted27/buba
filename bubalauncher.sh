@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/unlisted/buba
+cd ~/buba
 while true; do
   ./bubamain.py
   sleep 0.2

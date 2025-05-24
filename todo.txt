@@ -1,3 +1,4 @@
 # = completed
 #add a config file for the GPIO of the screen
+make unixify work with .sh
 build auto updator
