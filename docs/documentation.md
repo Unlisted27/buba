@@ -21,7 +21,7 @@ gpio_cleanup(gpiozero_button)
 ### description:  
 - closes a gpiozero button object. This is needed to ensure that gpiozero buttons arent being held by gpiozero needlessly, as they could be needed somewhere else.
 ### Example:  
-<code>
-    btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time) </code>
+    btn_up = gpiozero.Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)  
+    gpio_cleanup(gpiozero_button)  
 
 # bubabasicsconfig
