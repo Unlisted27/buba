@@ -61,6 +61,7 @@ def menu(items:list,device = bubasicsconfig.device,font=ImageFont.load_default()
     def select():
         nonlocal cursor
         nonlocal selected
+        #If you are looking for where selected is modified, it's here. select is called when the select button is pressed using a gpiozero.button.when_pressed callback
         selected = (cursor,items[cursor])
     btn_up.when_pressed = move_up
     btn_down.when_pressed = move_down
