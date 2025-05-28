@@ -1,9 +1,6 @@
 # Table of Contents
 1. [bubasics](#bubasics)  
 2. [bubasicsconfig](#bubasicsconfig)
-3. [Third Example](#third-example)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
-
 
 # bubasics
  a) [gpio_cleanup](#gpio_cleanup)  
