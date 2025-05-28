@@ -11,6 +11,8 @@
  c) [scrnprint](#scrnprint)  
  d) [menu](#menu)  
  e) [error_warn](#error_warn)  
+ f) [is_buba_exec](#is_buba_exec)  
+ g) [run_buba_exec](#run_buba_exec)
 
 ## gpio_cleanup
 gpio_cleanup(gpiozero_button)  
