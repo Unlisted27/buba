@@ -1,5 +1,8 @@
+import os
 import pigpio
 import time
+
+os.system("sudo systemctl start pigpiod")
 
 PIN = 17  # GPIO where IR receiver OUT is connected
 
