@@ -73,7 +73,7 @@ def listen():
 
     try:
         bubasics.scrnprint(f"Listening for IR signals for {listen_time} seconds...")
-        time.sleep(listen_time)  # You can adjust the recording window
+        time.sleep(listen_time)  #You can adjust the recording window
     finally:
         cb.cancel()
         pi.stop()
@@ -90,4 +90,5 @@ def listen():
 data = listen()
 send(data)
 bubasics.btn_select.wait_for_press()
+bubasics.button_cleanup()
 exit()
