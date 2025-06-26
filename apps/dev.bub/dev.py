@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-print("Made it!")
 import socket, bubasics
 try:
     btn_select = bubasics.btn_select
