@@ -2,7 +2,7 @@
 import subprocess
 from pathlib import Path
 
-def fix_py_files(directory):
+def fix_all_files(directory):
     path = Path(directory)
     for py_file in path.rglob("*.py"):  # recursive search
         # Make the file executable
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} /path/to/directory")
     else:
-        fix_py_files(sys.argv[1])
+        fix_all_files(sys.argv[1])
