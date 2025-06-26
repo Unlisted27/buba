@@ -1,39 +1,93 @@
 #!/usr/bin/env python3
 
-import os
-import pigpio
-import time
+import os, pigpio, time, bubasics
 
-os.system("sudo systemctl start pigpiod")
+def send(data):
+    bubasics.scrnprint()
+    pi = pigpio.pi()
+    PIN = 18  # Must be a hardware PWM-capable GPIO (18 recommended)
+    CARRIER = 38000  # 38 kHz
+    marks_wid = {}
+    spaces_wid = {}
 
-PIN = 17  # GPIO where IR receiver OUT is connected
+    wave = []
 
-pi = pigpio.pi()
-if not pi.connected:
-    exit()
+    for i in range(len(data)):
+        duration = data[i]
+        if i % 2 == 0:
+            # Mark (LED on with modulation)
+            if duration not in marks_wid:
+                wf = []
+                cycles = int(CARRIER * duration / 1e6)
+                on = int(1e6 / CARRIER / 2)
+                off = on
+                for _ in range(cycles):
+                    wf.append(pigpio.pulse(1 << PIN, 0, on))
+                    wf.append(pigpio.pulse(0, 1 << PIN, off))
+                pi.wave_add_generic(wf)
+                marks_wid[duration] = pi.wave_create()
+            wave.append(marks_wid[duration])
+        else:
+            # Space (LED off)
+            if duration not in spaces_wid:
+                pi.wave_add_generic([pigpio.pulse(0, 0, duration)])
+                spaces_wid[duration] = pi.wave_create()
+            wave.append(spaces_wid[duration])
 
-pi.set_mode(PIN, pigpio.INPUT)
+    pi.wave_chain(wave)
 
-# Store durations here
-raw_data = []
-last_tick = None
+    while pi.wave_tx_busy():
+        time.sleep(0.01)
 
-def cbf(gpio, level, tick):
-    global last_tick
-    if last_tick is not None:
-        delta = pigpio.tickDiff(last_tick, tick)  # Duration in microseconds
-        raw_data.append(delta)
-        print(delta, end=", ", flush=True)
-    last_tick = tick
+    for wid in marks_wid.values():
+        pi.wave_delete(wid)
+    for wid in spaces_wid.values():
+        pi.wave_delete(wid)
 
-# Start capturing
-cb = pi.callback(PIN, pigpio.EITHER_EDGE, cbf)
+def listen():
+    os.system("sudo systemctl start pigpiod") #Need to start pigpiod (pigpio deamon) for this to work
 
-try:
-    print("Press remote button...")
-    time.sleep(5)  # You can adjust the recording window
-finally:
-    cb.cancel()
-    pi.stop()
-    print("\nCaptured pulse list:")
-    print(raw_data)
+    PIN = 17  # GPIO where IR receiver OUT is connected
+    listen_time = 5
+
+    pi = pigpio.pi()
+    if not pi.connected:
+        exit()
+
+    pi.set_mode(PIN, pigpio.INPUT)
+
+    # Store durations here
+    raw_data = []
+    last_tick = None
+
+    def cbf(gpio, level, tick):
+        global last_tick
+        if last_tick is not None:
+            delta = pigpio.tickDiff(last_tick, tick)  # Duration in microseconds
+            raw_data.append(delta)
+            print(delta, end=", ", flush=True)
+        last_tick = tick
+
+    # Start capturing
+    cb = pi.callback(PIN, pigpio.EITHER_EDGE, cbf)
+
+    try:
+        bubasics.scrnprint(f"Listening for IR signals for {listen_time} seconds...")
+        time.sleep(listen_time)  # You can adjust the recording window
+    finally:
+        cb.cancel()
+        pi.stop()
+        print("\nCaptured pulse list:")
+        print(raw_data)
+        if len(raw_data) > 0:
+            bubasics.clear_screen()
+            bubasics.scrnprint(f"Captured {len(raw_data)} pulses!")
+            return data
+        else:
+            bubasics.scrnprint(f"Did not capture any pulses ):")
+        
+
+data = listen()
+send(data)
+bubasics.btn_select.wait_for_press()
+exit()
