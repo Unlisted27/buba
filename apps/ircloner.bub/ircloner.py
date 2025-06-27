@@ -54,7 +54,7 @@ def send_single_wave(data):
 
 import pigpio, time
 
-def send_in_chunks(data, chunk_size=500):
+def send_in_chunks(data, chunk_size=50):
     pi = pigpio.pi()
     PIN     = 19
     CARRIER = 38000
