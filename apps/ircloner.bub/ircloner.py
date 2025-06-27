@@ -30,6 +30,8 @@ def send(data):
 
     for i in range(len(data)):
         duration = data[i]
+        if duration < 10:  # Skip junk durations
+            continue
         if i % 2 == 0:
             # Mark (LED on with modulation)
             if duration not in marks_wid:
@@ -43,17 +45,24 @@ def send(data):
                     wf.append(pigpio.pulse(0, 1 << PIN, off))
                 pi.wave_add_generic(wf)
                 #bubasics.error_warn() #MADE IT HERE
-                marks_wid[duration] = pi.wave_create()
-                bubasics.error_warn()
+                wid = pi.wave_create()
+                if wid < 0:
+                    bad_waves += 1
+                    continue
+                marks_wid[duration] = wid
+                #bubasics.error_warn() #DIDNT MAKE IT
             wave.append(marks_wid[duration])
         else:
             # Space (LED off)
             #bubasics.error_warn() #DIDNT MAKE IT
             if duration not in spaces_wid:
                 pi.wave_add_generic([pigpio.pulse(0, 0, duration)])
-                #bubasics.error_warn() #DIDNT MAKE IT
-                spaces_wid[duration] = pi.wave_create()
-            wave.append(spaces_wid[duration])
+                wid = pi.wave_create()
+                if wid < 0:
+                    bad_waves += 1
+                    continue
+                spaces_wid[duration] = wid
+        wave.append(spaces_wid[duration])
     #bubasics.error_warn() DIDNT MAKE IT
     pi.wave_chain(wave)
     #bubasics.error_warn()
@@ -64,7 +73,10 @@ def send(data):
         pi.wave_delete(wid)
     for wid in spaces_wid.values():
         pi.wave_delete(wid)
+    pi.wave_clear()
     pi.stop()
+    bubasics.scrnprint(f"Number of bad waves: {bad_waves}")
+    bubasics.btn_select.wait_for_press()
 
 def listen():
     os.system("sudo systemctl start pigpiod") #Need to start pigpiod (pigpio deamon) for this to work
@@ -116,8 +128,7 @@ def listen():
         
 
 data = listen()
-for _ in range(100):
-   send(data)
+send(data)
 #test()
 bubasics.error_warn() #FOR TESTING
 bubasics.button_cleanup()
