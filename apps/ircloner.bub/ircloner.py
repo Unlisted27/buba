@@ -3,9 +3,10 @@
 import os, pigpio, time, bubasics
 
 def send(data):
-    bubasics.scrnprint()
+    bubasics.clear_screen()
+    bubasics.scrnprint("Sending data...")
     pi = pigpio.pi()
-    PIN = 18  # Must be a hardware PWM-capable GPIO (18 recommended)
+    PIN = 19  # Must be a hardware PWM-capable GPIO (18 recommended)
     CARRIER = 38000  # 38 kHz
     marks_wid = {}
     spaces_wid = {}
@@ -95,7 +96,9 @@ def listen():
         
 
 data = listen()
-send(data)
+for _ in range(100):
+    send(data)
+
 bubasics.btn_select.wait_for_press()
 bubasics.button_cleanup()
 exit()
