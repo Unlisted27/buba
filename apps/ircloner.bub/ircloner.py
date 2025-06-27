@@ -42,7 +42,7 @@ def send(data):
                     wf.append(pigpio.pulse(1 << PIN, 0, on))
                     wf.append(pigpio.pulse(0, 1 << PIN, off))
                 pi.wave_add_generic(wf)
-                bubasics.error_warn()
+                #bubasics.error_warn() #MADE IT HERE
                 marks_wid[duration] = pi.wave_create()
             wave.append(marks_wid[duration])
         else:
@@ -51,7 +51,7 @@ def send(data):
                 pi.wave_add_generic([pigpio.pulse(0, 0, duration)])
                 spaces_wid[duration] = pi.wave_create()
             wave.append(spaces_wid[duration])
-
+    bubasics.error_warn()
     pi.wave_chain(wave)
     #bubasics.error_warn()
     while pi.wave_tx_busy():
