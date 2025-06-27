@@ -114,6 +114,7 @@ def listen():
 #for _ in range(100):
 #   send(data)
 test()
+bubasics.error_warn()
 bubasics.button_cleanup()
 bubasics.btn_select.wait_for_press()
 bubasics.button_cleanup()
