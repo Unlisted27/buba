@@ -52,6 +52,49 @@ def send_single_wave(data):
 
     pi.stop()
 
+import pigpio, time
+
+def send_in_chunks(data, chunk_size=500):
+    pi = pigpio.pi()
+    PIN     = 19
+    CARRIER = 38000
+
+    # Helper: build a pulse list from a slice of data
+    def build_wf(data_slice):
+        wf = []
+        for idx, duration in data_slice:
+            if duration < 10:
+                continue
+            if idx % 2 == 0:
+                # mark: carrier burst
+                cycles = int(CARRIER * duration / 1e6)
+                on  = int(1e6 / CARRIER / 2)
+                off = on
+                for _ in range(cycles):
+                    wf.append(pigpio.pulse(1<<PIN, 0, on))
+                    wf.append(pigpio.pulse(0, 1<<PIN, off))
+            else:
+                # space: LED off
+                wf.append(pigpio.pulse(0, 0, duration))
+        return wf
+
+    # Pair each duration with its index
+    indexed = list(enumerate(data))
+    # Split into chunks of chunk_size pairs
+    for i in range(0, len(indexed), chunk_size):
+        slice_ = indexed[i:i+chunk_size]
+        wf    = build_wf(slice_)
+        pi.wave_clear()
+        pi.wave_add_generic(wf)
+        wid = pi.wave_create()
+        if wid >= 0:
+            pi.wave_send_once(wid)
+            while pi.wave_tx_busy():
+                time.sleep(0.01)
+            pi.wave_delete(wid)
+        else:
+            print("Chunk failed to create wave")
+    pi.stop()
 
 def send(data):
     #bubasics.clear_screen()
@@ -164,7 +207,7 @@ def listen():
         
 
 data = listen()
-send_single_wave(data)
+send_in_chunks(data)
 #test()
 #bubasics.error_warn() #FOR TESTING
 #bubasics.button_cleanup()
