@@ -43,15 +43,22 @@ def send(data):
         pi.wave_delete(wid)
     for wid in spaces_wid.values():
         pi.wave_delete(wid)
+    pi.stop()
 
 def listen():
     os.system("sudo systemctl start pigpiod") #Need to start pigpiod (pigpio deamon) for this to work
+    time.sleep(0.5)  # Give it time to start
 
     PIN = 17  # GPIO where IR receiver OUT is connected
     listen_time = 5
 
-    pi = pigpio.pi()
-    if not pi.connected:
+    for _ in range(5):
+        pi = pigpio.pi()
+        if pi.connected:
+            break
+        time.sleep(0.2)
+    else:
+        bubasics.error_warn()
         exit()
 
     pi.set_mode(PIN, pigpio.INPUT)
@@ -61,7 +68,7 @@ def listen():
     last_tick = None
 
     def cbf(gpio, level, tick):
-        global last_tick
+        nonlocal last_tick
         if last_tick is not None:
             delta = pigpio.tickDiff(last_tick, tick)  # Duration in microseconds
             raw_data.append(delta)
@@ -82,7 +89,7 @@ def listen():
         if len(raw_data) > 0:
             bubasics.clear_screen()
             bubasics.scrnprint(f"Captured {len(raw_data)} pulses!")
-            return data
+            return raw_data
         else:
             bubasics.scrnprint(f"Did not capture any pulses ):")
         
