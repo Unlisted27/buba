@@ -26,6 +26,7 @@ def send(data):
     CARRIER = 38000  # 38 kHz
     marks_wid = {}
     spaces_wid = {}
+    bad_waves = 0
 
     wave = []
 
@@ -35,24 +36,18 @@ def send(data):
             continue
         if i % 2 == 0:
             # Mark (LED on with modulation)
-            if duration not in marks_wid:
-                wf = []
-                cycles = int(CARRIER * duration / 1e6)
-                on = int(1e6 / CARRIER / 2)
-                off = on
-                #bubasics.error_warn() #MADE IT HERE
-                for _ in range(cycles):
-                    wf.append(pigpio.pulse(1 << PIN, 0, on))
-                    wf.append(pigpio.pulse(0, 1 << PIN, off))
-                pi.wave_add_generic(wf)
-                #bubasics.error_warn() #MADE IT HERE
+            if duration not in spaces_wid:
+                pi.wave_add_generic([pigpio.pulse(0, 0, duration)])
                 wid = pi.wave_create()
                 if wid < 0:
                     bad_waves += 1
                     continue
-                marks_wid[duration] = wid
-                #bubasics.error_warn() #DIDNT MAKE IT
-            wave.append(marks_wid[duration])
+                spaces_wid[duration] = wid
+
+            # Only append if it now exists
+            if duration in spaces_wid:
+                wave.append(spaces_wid[duration])
+
         else:
             # Space (LED off)
             #bubasics.error_warn() #DIDNT MAKE IT
