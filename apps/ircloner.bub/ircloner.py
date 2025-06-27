@@ -112,7 +112,9 @@ def listen():
         
 
 data = listen()
-send_in_chunks(data)
+for i in range(100):
+    send_in_chunks(data)
+    print(i)
 #test()
 #bubasics.error_warn() #FOR TESTING
 #bubasics.button_cleanup()
