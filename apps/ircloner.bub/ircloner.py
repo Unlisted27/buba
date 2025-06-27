@@ -14,6 +14,7 @@ def test():
         time.sleep(0.5)
 
     pi.stop()
+    bubasics.btn_select.wait_for_press()
 
 
 def send(data):
