@@ -16,6 +16,42 @@ def test():
     pi.stop()
     #bubasics.btn_select.wait_for_press()
 
+def send_single_wave(data):
+    pi = pigpio.pi()
+    PIN     = 19
+    CARRIER = 38000
+
+    # Build a single pulse list for the entire sequence:
+    wf = []
+    for idx, duration in enumerate(data):
+        if duration < 10:
+            continue
+        if idx % 2 == 0:
+            # “mark”: generate carrier bursts for `duration`
+            cycles = int(CARRIER * duration / 1e6)
+            on  = int(1e6 / CARRIER / 2)
+            off = on
+            for _ in range(cycles):
+                wf.append(pigpio.pulse(1<<PIN, 0, on))
+                wf.append(pigpio.pulse(0, 1<<PIN, off))
+        else:
+            # “space”: LED off for `duration`
+            wf.append(pigpio.pulse(0, 0, duration))
+
+    # Clear, add, create, and send:
+    pi.wave_clear()
+    pi.wave_add_generic(wf)
+    wid = pi.wave_create()
+    if wid >= 0:
+        pi.wave_send_once(wid)
+        while pi.wave_tx_busy():
+            time.sleep(0.01)
+        pi.wave_delete(wid)
+    else:
+        print("Failed to create wave")
+
+    pi.stop()
+
 
 def send(data):
     #bubasics.clear_screen()
@@ -128,7 +164,7 @@ def listen():
         
 
 data = listen()
-send(data)
+send_single_wave(data)
 #test()
 #bubasics.error_warn() #FOR TESTING
 #bubasics.button_cleanup()
