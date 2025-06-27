@@ -2,6 +2,20 @@
 
 import os, pigpio, time, bubasics
 
+def test():
+    pi = pigpio.pi()
+    pi.set_mode(19, pigpio.OUTPUT)
+
+    bubasics.scrnprint("Blinking GPIO19...")
+    for _ in range(5):
+        pi.write(19, 1)
+        time.sleep(0.5)
+        pi.write(19, 0)
+        time.sleep(0.5)
+
+    pi.stop()
+
+
 def send(data):
     bubasics.clear_screen()
     bubasics.scrnprint("Sending data...")
@@ -95,10 +109,11 @@ def listen():
             bubasics.scrnprint(f"Did not capture any pulses ):")
         
 
-data = listen()
-for _ in range(100):
-    send(data)
-
+#data = listen()
+#for _ in range(100):
+#   send(data)
+test()
+bubasics.button_cleanup()
 bubasics.btn_select.wait_for_press()
 bubasics.button_cleanup()
 exit()
