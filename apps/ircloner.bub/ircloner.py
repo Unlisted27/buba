@@ -110,10 +110,10 @@ def listen():
             bubasics.scrnprint(f"Did not capture any pulses ):")
         
 
-#data = listen()
-#for _ in range(100):
-#   send(data)
-test()
+data = listen()
+for _ in range(100):
+   send(data)
+#test()
 bubasics.error_warn()
 bubasics.button_cleanup()
 bubasics.btn_select.wait_for_press()
