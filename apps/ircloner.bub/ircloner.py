@@ -37,11 +37,12 @@ def send(data):
                 cycles = int(CARRIER * duration / 1e6)
                 on = int(1e6 / CARRIER / 2)
                 off = on
-                bubasics.error_warn()
+                #bubasics.error_warn() #MADE IT HERE
                 for _ in range(cycles):
                     wf.append(pigpio.pulse(1 << PIN, 0, on))
                     wf.append(pigpio.pulse(0, 1 << PIN, off))
                 pi.wave_add_generic(wf)
+                bubasics.error_warn()
                 marks_wid[duration] = pi.wave_create()
             wave.append(marks_wid[duration])
         else:
