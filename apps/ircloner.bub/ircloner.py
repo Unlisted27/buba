@@ -49,9 +49,10 @@ def send(data):
             # Space (LED off)
             if duration not in spaces_wid:
                 pi.wave_add_generic([pigpio.pulse(0, 0, duration)])
+                bubasics.error_warn()
                 spaces_wid[duration] = pi.wave_create()
             wave.append(spaces_wid[duration])
-    bubasics.error_warn()
+    #bubasics.error_warn() DIDNT MAKE IT
     pi.wave_chain(wave)
     #bubasics.error_warn()
     while pi.wave_tx_busy():
