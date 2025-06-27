@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-import os, pigpio, time, bubasics
+import os, pigpio, time, #bubasics
 
 def test():
     pi = pigpio.pi()
     pi.set_mode(19, pigpio.OUTPUT)
 
-    bubasics.scrnprint("Blinking GPIO19...")
+    #bubasics.scrnprint("Blinking GPIO19...")
     for _ in range(5):
         pi.write(19, 1)
         time.sleep(0.5)
@@ -14,12 +14,13 @@ def test():
         time.sleep(0.5)
 
     pi.stop()
-    bubasics.btn_select.wait_for_press()
+    #bubasics.btn_select.wait_for_press()
 
 
 def send(data):
-    bubasics.clear_screen()
-    bubasics.scrnprint("Sending data...")
+    #bubasics.clear_screen()
+    print("Sending data...")
+    #bubasics.scrnprint("Sending data...")
     pi = pigpio.pi()
     PIN = 19  # Must be a hardware PWM-capable GPIO (18 recommended)
     CARRIER = 38000  # 38 kHz
@@ -75,8 +76,9 @@ def send(data):
         pi.wave_delete(wid)
     pi.wave_clear()
     pi.stop()
-    bubasics.scrnprint(f"Number of bad waves: {bad_waves}")
-    bubasics.btn_select.wait_for_press()
+    print(f"Number of bad waves: {bad_waves}")
+    #bubasics.scrnprint(f"Number of bad waves: {bad_waves}")
+    #bubasics.btn_select.wait_for_press()
 
 def listen():
     os.system("sudo systemctl start pigpiod") #Need to start pigpiod (pigpio deamon) for this to work
@@ -91,7 +93,7 @@ def listen():
             break
         time.sleep(0.2)
     else:
-        bubasics.error_warn()
+        #bubasics.error_warn()
         exit()
 
     pi.set_mode(PIN, pigpio.INPUT)
@@ -112,7 +114,8 @@ def listen():
     cb = pi.callback(PIN, pigpio.EITHER_EDGE, cbf)
 
     try:
-        bubasics.scrnprint(f"Listening for IR signals for {listen_time} seconds...")
+        print(f"Listening for IR signals for {listen_time} seconds...")
+        #bubasics.scrnprint(f"Listening for IR signals for {listen_time} seconds...")
         time.sleep(listen_time)  #You can adjust the recording window
     finally:
         cb.cancel()
@@ -120,18 +123,20 @@ def listen():
         print("\nCaptured pulse list:")
         print(raw_data)
         if len(raw_data) > 0:
-            bubasics.clear_screen()
-            bubasics.scrnprint(f"Captured {len(raw_data)} pulses!")
+            #bubasics.clear_screen()
+            #bubasics.scrnprint(f"Captured {len(raw_data)} pulses!")
+            print(f"Captured {len(raw_data)} pulses!")
             return raw_data
         else:
-            bubasics.scrnprint(f"Did not capture any pulses ):")
+            print(f"Did not capture any pulses ):")
+            #bubasics.scrnprint(f"Did not capture any pulses ):")
         
 
 data = listen()
 send(data)
 #test()
-bubasics.error_warn() #FOR TESTING
-bubasics.button_cleanup()
-bubasics.btn_select.wait_for_press()
-bubasics.button_cleanup()
+#bubasics.error_warn() #FOR TESTING
+#bubasics.button_cleanup()
+#bubasics.btn_select.wait_for_press()
+#bubasics.button_cleanup()
 exit()
