@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, pigpio, time, #bubasics
+import os, pigpio, time#, bubasics
 
 def test():
     pi = pigpio.pi()
