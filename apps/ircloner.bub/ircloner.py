@@ -51,7 +51,7 @@ def send(data):
             wave.append(spaces_wid[duration])
 
     pi.wave_chain(wave)
-
+    bubasics.error_warn()
     while pi.wave_tx_busy():
         time.sleep(0.01)
 
@@ -114,7 +114,7 @@ data = listen()
 for _ in range(100):
    send(data)
 #test()
-bubasics.error_warn()
+bubasics.error_warn() #FOR TESTING
 bubasics.button_cleanup()
 bubasics.btn_select.wait_for_press()
 bubasics.button_cleanup()
