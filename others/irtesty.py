@@ -24,4 +24,5 @@ def carrier(gpio, duration=0.01, frequency=38000):
 # Send IR burst for 10 ms
 carrier(IR_GPIO, 38000, 1)
 
+os.system("sudo systemctl stop pigpiod")
 pi.stop()
