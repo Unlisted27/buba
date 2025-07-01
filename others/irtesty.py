@@ -11,37 +11,46 @@ CARRIER_FREQ = 38000  # 38 kHz
 pi = pigpio.pi()
 if not pi.connected:
     raise RuntimeError("Failed to connect to pigpiod.")
+def carrier_burst(duration_us,freq = 38000, duty_cycle=0.5):
+    cycles = int(freq * duration_us / 1_000_000.0)
+    on_time = int((1_000_000 / freq) * duty_cycle)
+    off_time = int((1_000_000 / freq) * (1 - duty_cycle))
+    pulses = []
+    for _ in range(cycles):
+        pulses.append(pigpio.pulse(1 << IR_GPIO, 0, on_time))
+        pulses.append(pigpio.pulse(0, 1 << IR_GPIO, off_time))
+    pi.wave_add_generic(pulses)
+    return pi.wave_create()
 
-def gen_ir_wave(pulse_data, gpio, freq=38000, duty_cycle=0.5):
+def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5):
+    #Build the waveform
+    pi.set_mode(IR_GPIO, pigpio.OUTPUT)
+    pi.wave_clear()
+    wave_ids = []
     wave = []
     on = True
     for duration in pulse_data:
         if on: #Sending the on data to the wave
-            cycles = int(freq*duration / 1_000_000.0)
-            on_time = int((1_000_000 / freq) * duty_cycle)
-            off_time = int((1_000_000 / freq) * (1 - duty_cycle))
-            for _ in range(cycles):
-                wave.append(pigpio.pulse(1 << gpio, 0, on_time))
-                wave.append(pigpio.pulse(0, 1 << gpio, off_time))
+            wid = carrier_burst(duration)
         else:
-            wave.append(pigpio.pulse(0, 0, duration)) #Not sneding anything as we are in the off part of the wave
+            pi.wave_add_generic([pigpio.pulse(0,0,duration)])
+            wid = pi.wave_create()
+        wave_ids.append(wid)
         on = not on #Cheeky syntax, just alternate on/off
-    return wave
+    # Send all waves as a chain
+    chain = []
+    for wid in wave_ids: #wid is wave id
+        chain += [255, 0, wid]  # 255, 0 means "wave id follows"
+    pi.wave_chain(chain)
 
-#Build the waveform
-pi.set_mode(IR_GPIO, pigpio.OUTPUT)
-pi.wave_clear()
+    # Wait until done
+    while pi.wave_tx_busy():
+        time.sleep(0.01)
 
-wave = gen_ir_wave(pulse_data, IR_GPIO)
-pi.wave_add_generic(wave)
-wave_id = pi.wave_create()
-
-#Transmit the wave
-if wave_id >= 0:
-    pi.wave_send_once(wave_id) #WE DO THE SENDING HERE
-    while pi.wave_tx_busy(): #Ensure we hold still until we are done transmitting
-        time.sleep(0.01) 
-    pi.wave_delete(wave_id) #Delete as to not waste memory
-
-#os.system("sudo systemctl stop pigpiod")
+    # Cleanup
+    for wid in wave_ids:
+        pi.wave_delete(wid)
+    pi.wave_clear()
+    
+os.system("sudo systemctl stop pigpiod")
 pi.stop()
