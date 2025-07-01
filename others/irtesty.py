@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import pigpio
 import time
+import os
+os.system("sudo systemctl start pigpiod")
 
 IR_GPIO = 19      # Your IR LED is connected to GPIO 19
 CARRIER_FREQ = 38000  # 38 kHz
