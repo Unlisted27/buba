@@ -22,7 +22,7 @@ def carrier_burst(duration_us,freq = 38000, duty_cycle=0.5):
     pi.wave_add_generic(pulses)
     return pi.wave_create()
 
-def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5):
+def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5, timeout=5):
     #Build the waveform
     pi.set_mode(IR_GPIO, pigpio.OUTPUT)
     pi.wave_clear()
@@ -44,13 +44,18 @@ def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5):
     pi.wave_chain(chain)
 
     # Wait until done
+    
     while pi.wave_tx_busy():
+        start = time.time()
+        if time.time() - start > timeout:
+            print("Timeout: wave didn't finish transmitting.")
+            break
         time.sleep(0.01)
 
     # Cleanup
     for wid in wave_ids:
         pi.wave_delete(wid)
     pi.wave_clear()
-    
+
 os.system("sudo systemctl stop pigpiod")
 pi.stop()
