@@ -19,6 +19,6 @@ def carrier(gpio, duration=0.01, frequency=38000):
     pi.hardware_PWM(gpio, 0, 0)  # Turn off
 
 # Send IR burst for 10 ms
-carrier(IR_GPIO, 38000, 0.01)
+carrier(IR_GPIO, 38000, 1)
 
 pi.stop()
