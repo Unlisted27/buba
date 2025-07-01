@@ -43,5 +43,5 @@ if wave_id >= 0:
         time.sleep(0.01) 
     pi.wave_delete(wave_id) #Delete as to not waste memory
 
-os.system("sudo systemctl stop pigpiod")
+#os.system("sudo systemctl stop pigpiod")
 pi.stop()
