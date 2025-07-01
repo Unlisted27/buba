@@ -1,28 +1,24 @@
-#!/usr/bin/env python3
-import pigpio, time
+import pigpio
+import time
 
-PIN     = 19      # your IR LED GPIO
-CARRIER = 38000   # 38 kHz
-DUR     = 1.0     # seconds
+IR_GPIO = 19      # Your IR LED is connected to GPIO 19
+CARRIER_FREQ = 38000  # 38 kHz
 
 pi = pigpio.pi()
 if not pi.connected:
-    raise RuntimeError("Cannot connect to pigpio daemon")
-pi.set_mode(PIN, pigpio.OUTPUT)
+    raise RuntimeError("Failed to connect to pigpiod.")
 
-# 1) Constant ON (no carrier)
-print(">>> Constant ON (no carrier) for 1 s")
-pi.write(PIN, 1)
-time.sleep(DUR)
-pi.write(PIN, 0)
-time.sleep(0.5)
+# Generate a carrier at 38kHz on GPIO 19
+def carrier(gpio, duration=0.01, frequency=38000):
+    """
+    Send a modulated IR signal at 38kHz for `duration` seconds.
+    """
+    duty_cycle = 0.5  # 50%
+    pi.hardware_PWM(gpio, frequency, int(duty_cycle * 1_000_000))  # duty in range 0–1M
+    time.sleep(duration)
+    pi.hardware_PWM(gpio, 0, 0)  # Turn off
 
-# 2) 38 kHz carrier for 1 s
-print(">>> 38 kHz carrier for 1 s")
-# hardware_PWM(pin, frequency, dutycycle) — dutycycle: 0 to 1e6 (i.e. 0%–100%)
-pi.hardware_PWM(PIN, CARRIER, 500_000)  # 50% duty
-time.sleep(DUR)
-pi.hardware_PWM(PIN, 0, 0)              # stop PWM
+# Send IR burst for 10 ms
+carrier(IR_GPIO, 38000, 0.01)
+
 pi.stop()
-
-print("Done")
