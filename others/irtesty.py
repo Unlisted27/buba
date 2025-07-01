@@ -22,7 +22,7 @@ def carrier_burst(duration_us,freq = 38000, duty_cycle=0.5):
     pi.wave_add_generic(pulses)
     return pi.wave_create()
 
-def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5, timeout=5):
+def send_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5, timeout=5):
     #Build the waveform
     pi.set_mode(IR_GPIO, pigpio.OUTPUT)
     pi.wave_clear()
@@ -56,4 +56,6 @@ def gen_ir_wave_chain(pulse_data, gpio, freq=38000, duty_cycle=0.5, timeout=5):
         pi.wave_delete(wid)
     pi.wave_clear()
 
+
+send_ir_wave_chain(pulse_data, IR_GPIO)
 pi.stop()
