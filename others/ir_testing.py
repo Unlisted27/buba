@@ -27,16 +27,16 @@ result = pi.hardware_PWM(IR_GPIO, freq, duty_cycle)
 if result != 0:
     print(result)
 else:
-    print("hardware_PWM setup success! (IDK WHAT WE NEED THIS FOR)")
+    print("hardware_PWM success!")
 
-pi.wave_clear()
-pi.wave_add_generic(pulses)
-wave_id = pi.wave_create()
-if not (result >= 0):
-    print(result)
-else: print("Wave created succesfully!")
-
-pi.wave_send_repeat(wave_id)
-time.sleep(2)
-pi.wave_tx_stop()
+#pi.wave_clear()
+#pi.wave_add_generic(pulses)
+#wave_id = pi.wave_create()
+#if not (result >= 0):
+#    print(result)
+#else: print("Wave created succesfully!")
+#
+#pi.wave_send_repeat(wave_id)
+time.sleep(5)
+#pi.wave_tx_stop()
 pi.stop()
