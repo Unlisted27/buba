@@ -26,6 +26,7 @@ def clear_screen(device = bubasicsconfig.device):
     device.clear()
 
 def scrnprint(text:str,text_color = "white",back_color = "black",coords = (0,0),device = bubasicsconfig.device,text_font=ImageFont.load_default()):
+    """To use scrnprint for multi-lined text, use escape codes such as '\\n' between each line, as calling scrnprint clears the current screen"""
     height = device.height
     width = device.width
     img = Image.new("RGB",(width,height),back_color)

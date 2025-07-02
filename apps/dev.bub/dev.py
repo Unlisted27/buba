@@ -14,8 +14,7 @@ try:
         finally:
             s.close()
         return IP
-    bubasics.scrnprint("My ip: "+get_ip())
-    bubasics.scrnprint("Press [SELECT] to exit",coords=(0,20))
+    bubasics.scrnprint("My ip: "+get_ip() +"\n Press [SELECT] to exit")
     btn_select.wait_for_press()
     bubasics.clear_screen()
     bubasics.button_cleanup()
