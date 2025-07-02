@@ -36,6 +36,7 @@ if not (result >= 0):
     print(result)
 else: print("Wave created succesfully!")
 
-pi.wave_send_once(wave_id)
-
+pi.wave_send_repeat(wave_id)
+time.sleep(2)
+pi.wave_tx_stop()
 pi.stop()
