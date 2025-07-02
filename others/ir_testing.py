@@ -21,8 +21,9 @@ for duration in pulse_data:
         pulses.append(pigpio.pulse(gpio_on=0, gpio_off=1 << IR_GPIO, delay=duration))
     on = not on  # toggle between on and off
 
-
-
+pi.set_mode(IR_GPIO, pigpio.OUTPUT)
+pi.write(IR_GPIO, 1)
+time.sleep(2)
 result = pi.hardware_PWM(IR_GPIO, freq, duty_cycle)
 if result != 0:
     print(result)
