@@ -6,19 +6,17 @@ import time
 pulse_data = [9000, 4500, 560, 560, 560, 1690]  # Typical NEC header + 2 bits
 
 IR_GPIO = 19
-CARRIER_FREQ = 38000
-DUTY_CYCLE = 2**15  # realistic IR LED duty cycle
+freq = 38000
+duty_cycle = 2**15  # realistic IR LED duty cycle
 
 pi = pigpio.pi()
 if not pi.connected:
     raise RuntimeError("Failed to connect to pigpiod.")
 
-def carrier_burst(duration_us, freq=38000, duty_cycle=2**15):
-    result = pi.hardware_PWM(IR_GPIO, freq, duty_cycle)
-    if result != 0:
-        print(result)
-    else:
-        print("hardware_PWM success!")
+result = pi.hardware_PWM(IR_GPIO, freq, duty_cycle)
+if result != 0:
+    print(result)
+else:
+    print("hardware_PWM success!")
     
-
 pi.stop()
