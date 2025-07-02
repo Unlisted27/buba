@@ -6,7 +6,7 @@ import time
 pulse_data = [9000, 4500, 560, 560, 560, 1690]  # Typical NEC header + 2 bits
 
 IR_GPIO = 19
-freq = 50000#38000
+freq = 38000
 duty_cycle = 2**15  # realistic IR LED duty cycle
 
 pi = pigpio.pi()
@@ -17,7 +17,15 @@ result = pi.hardware_PWM(IR_GPIO, freq, duty_cycle)
 if result != 0:
     print(result)
 else:
-    print("hardware_PWM setup success!")
+    print("hardware_PWM setup success! (IDK WHAT WE NEED THIS FOR)")
 
-    
+pi.wave_clear()
+pi.wave_add_generic(pulse_data)
+wave_id = pi.wave_create()
+if not (result >= 0):
+    print(result)
+else: print("Wave created succesfully!")
+
+pi.wave_send_once(wave_id)
+
 pi.stop()
