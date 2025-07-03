@@ -16,4 +16,7 @@ with open("/tmp/fakeap.conf", "w") as f:
     f.write(hostapd_conf)
 
 # Start hostapd
+subprocess.run(["sudo", "systemctl", "stop", "wpa_supplicant"])
+subprocess.run(["sudo", "systemctl", "stop", "dhcpcd"])
+subprocess.run(["sudo", "systemctl", "stop", "NetworkManager"])
 subprocess.run(["sudo", "hostapd", "/tmp/fakeap.conf"])
