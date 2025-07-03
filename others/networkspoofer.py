@@ -1,6 +1,6 @@
 import subprocess
 
-ssid = "Guest_Wifi"
+ssid = "Free_Public_WiFi"
 hostapd_conf = f"""
 interface=wlan0
 driver=nl80211
