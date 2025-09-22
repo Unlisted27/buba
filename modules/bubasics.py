@@ -2,17 +2,18 @@ import time,os,pathlib,json,subprocess, bubasicsconfig
 from gpiozero import Button
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
-
-btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
-btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
-btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
-
 def gpio_cleanup(gpiozero_button):
     """takes a gpiozero.Button object and closes it"""
     try:
         gpiozero_button.close()
     except Exception as e:
         print(f"GPIO cleanup error: {e}")
+
+gpio_cleanup(4)
+btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+btn_select = Button(bubasicsconfig.buttons.btn_select_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
+
 
 def button_cleanup():
     try:
