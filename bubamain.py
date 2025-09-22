@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import sys,time,os, bubasics
-bubasics.button_cleanup()
-time.sleep(1)
 def main():
     try:
         while True:
