@@ -1,9 +1,10 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
-from gpiozero import Button, Device
+from gpiozero import Button
+import RPI.GPIO as GPIO
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
-Device.pin_factory.set_warning(False)
+GPIO.set_warning(False)
 
 btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
