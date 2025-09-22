@@ -1,6 +1,6 @@
 import time,os,pathlib,json,subprocess, bubasicsconfig
 from gpiozero import Button
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
