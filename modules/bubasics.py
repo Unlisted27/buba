@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 #from gpiozero import Button
 from PIL import Image, ImageDraw, ImageFont
 
-GPIO.set_warnings(False)
+GPIO.setwarnings(False)
 
 btn_up = Button(bubasicsconfig.buttons.btn_up_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
 btn_down = Button(bubasicsconfig.buttons.btn_down_gpio, bounce_time = bubasicsconfig.buttons.bounce_time)
